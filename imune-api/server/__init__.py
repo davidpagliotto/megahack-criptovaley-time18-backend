@@ -5,6 +5,8 @@ from starlette.middleware.cors import CORSMiddleware
 
 from server.controllers.login_controller import login_router
 from server.controllers.user_controller import user_router
+from server.controllers.vaccine_controller import vaccine_router
+from server.database.database import connect_to_mongo, close_mongo_connection
 
 
 def init_app() -> FastAPI:
@@ -23,14 +25,15 @@ def init_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    app.include_router(
-        **user_router,
-    )
-    app.include_router(
-        **login_router
-    )
+    routers = [user_router, login_router, vaccine_router]
+
+    [app.include_router(**r) for r in routers]
 
     _init_firebase_app()
+
+    app.add_event_handler("startup", connect_to_mongo)
+    app.add_event_handler("shutdown", close_mongo_connection)
+
     return app
 
 

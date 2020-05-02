@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, Depends
 
 from server.filter.filter import get_token
@@ -13,13 +15,13 @@ person_router = {
 }
 
 
-@router.post(path="")
+@router.post(path="", response_model=Person)
 async def post(person: Person):
     person_service = PersonService()
     return await person_service.upsert(person)
 
 
-@router.get(path="")
+@router.get(path="", response_model=List[Person])
 async def get_all(document: str = None, full_name: str = None):
     parameters = {
         'document': document,
@@ -29,7 +31,7 @@ async def get_all(document: str = None, full_name: str = None):
     return await person_service.get_all(parameters)
 
 
-@router.get(path="/{guid}")
+@router.get(path="/{guid}", response_model=Person)
 async def get_by_guid(guid):
     person_service = PersonService()
     return await person_service.get_by_guid(guid)

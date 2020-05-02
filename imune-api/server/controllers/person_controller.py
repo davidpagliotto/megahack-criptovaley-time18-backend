@@ -20,9 +20,10 @@ async def post(person: Person):
 
 
 @router.get(path="")
-async def get_all(document: str = None):
+async def get_all(document: str = None, full_name: str = None):
     parameters = {
-        'document': document
+        'document': document,
+        'full_name': full_name
     }
     person_service = PersonService()
     return await person_service.get_all(parameters)

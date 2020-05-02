@@ -15,4 +15,11 @@ vaccine_router = {
 
 @router.post(path="")
 async def post_vaccine(vaccine: Vaccine):
-    return await VaccineService.index_vaccine(vaccine)
+    vaccine_service = VaccineService()
+    return await vaccine_service.upsert(vaccine)
+
+
+@router.get(path="")
+async def get_all_vaccine():
+    vaccine_service = VaccineService()
+    return await vaccine_service.get_all()

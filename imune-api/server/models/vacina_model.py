@@ -1,6 +1,5 @@
-from pydantic import BaseModel
+from server.models.base_model import ApiBaseModel
 
 
-class Vaccine(BaseModel):
-    guid: str = None
+class Vaccine(ApiBaseModel):
     nome: str

@@ -15,5 +15,3 @@ def get_token(api_key_header: str = Security(x_api_key_header)):
     fb_service = FirebaseService()
     if not fb_service.validate_token(api_key_header):
         raise LoginException(message='Invalid token')
-
-    print('Token ok')

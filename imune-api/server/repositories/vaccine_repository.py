@@ -1,5 +1,5 @@
 from server.enums.enums import Collections
-from server.models.vacina_model import Vaccine
+from server.models.vaccine_model import Vaccine
 from server.repositories.base_repository import BaseRepository
 
 

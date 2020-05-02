@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
 from server.filter.filter import get_token
-from server.models.vacina_model import Vaccine
+from server.models.vaccine_model import Vaccine
 from server.services.vaccine_service import VaccineService
 
 router = APIRouter()

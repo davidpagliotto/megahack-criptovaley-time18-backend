@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
 from server.filter.filter import get_token
-from server.models.user_model import User
+from server.models.user_model import User, UserOutput
 from server.services.user_service import UserService
 
 router = APIRouter()
@@ -13,7 +13,7 @@ user_router = {
 }
 
 
-@router.post(path="")
+@router.post(path="", response_model=UserOutput)
 async def post_user(user: User):
     user_service = UserService()
     return await user_service.upsert(user)

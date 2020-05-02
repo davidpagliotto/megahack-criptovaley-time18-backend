@@ -13,3 +13,6 @@ class BaseService:
 
     async def get_all(self):
         return await self._repository.get_all()
+
+    async def get_by_guid(self, guid):
+        return await self._repository.get_by_guid(guid)

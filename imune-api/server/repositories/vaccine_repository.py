@@ -1,11 +1,8 @@
-from typing import TypeVar
-
 from server.enums.enums import Collections
+from server.models.vacina_model import Vaccine
 from server.repositories.base_repository import BaseRepository
-
-T = TypeVar('T')
 
 
 class VaccineRepository(BaseRepository):
     def __init__(self):
-        super().__init__(Collections.VACCINES.value)
+        super().__init__(Collections.VACCINES.value, Vaccine)

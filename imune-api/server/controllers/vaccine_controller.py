@@ -23,3 +23,9 @@ async def post_vaccine(vaccine: Vaccine):
 async def get_all_vaccine():
     vaccine_service = VaccineService()
     return await vaccine_service.get_all()
+
+
+@router.get(path="/{guid}")
+async def get_by_guid(guid):
+    vaccine_service = VaccineService()
+    return await vaccine_service.get_by_guid(guid)

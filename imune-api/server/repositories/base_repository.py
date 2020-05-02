@@ -43,5 +43,5 @@ class BaseRepository:
     async def get_one_by_attr_value(self, attr, value):
         document = await self.collection.find_one({attr: {'$eq': value}})
         if document is None:
-            raise NotFound("Item not found")
+            raise NotFoundException("Item not found")
         return self.model_clazz.parse_obj(document)

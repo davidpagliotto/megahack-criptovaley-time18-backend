@@ -12,12 +12,14 @@ class BaseRepository:
         self.collection = self.db.database[collection_name]
         self.model_clazz = model_clazz
 
-    async def upsert(self, model: ApiBaseModel):
+    async def upsert(self, model: ApiBaseModel, attr=None, value=None):
         model.guid = str(uuid.uuid4()) if not model.guid else str(model.guid)
 
         model_dict = model.dict()
 
-        await self.collection.replace_one({'guid': {'$eq': model.guid}}, model_dict, upsert=True)
+        attr = 'guid' if not attr else attr
+        value = model.guid if not value else value
+        await self.collection.replace_one({attr: {'$eq': value}}, model_dict, upsert=True)
 
         return model
 
@@ -36,4 +38,10 @@ class BaseRepository:
         document = await self.collection.find_one({'guid': {'$eq': guid}})
         if document is None:
             raise NotFoundException("Item not found")
+        return self.model_clazz.parse_obj(document)
+
+    async def get_one_by_attr_value(self, attr, value):
+        document = await self.collection.find_one({attr: {'$eq': value}})
+        if document is None:
+            raise NotFound("Item not found")
         return self.model_clazz.parse_obj(document)

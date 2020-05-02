@@ -4,19 +4,26 @@ from fastapi.responses import JSONResponse
 
 class ApiBaseException(Exception):
     status_code = 500
-    message = None
-    payload = None
-    detail = None
+    message = ''
+    detail = ''
 
 
 class EnvironmentException(ApiBaseException):
-    message = None
-    payload = None
-    detail = None
+    message = ''
+    detail = ''
 
-    def __init__(self, message=None, payload=None):
+    def __init__(self, message=None):
         self.message = message if message is not None else self.message
-        ApiBaseException.__init__(self, self.message, payload)
+        ApiBaseException.__init__(self, self.message)
+
+
+class LoginException(ApiBaseException):
+    status_code = 401
+
+    def __init__(self, status_code=401, message=None):
+        self.status_code = status_code
+        self.message = message if message is not None else self.message
+        ApiBaseException.__init__(self, self.message)
 
 
 class BusinessValidationException(Exception):
@@ -42,4 +49,11 @@ async def business_validation_exception_handler(request: Request, exc: BusinessV
     return JSONResponse(
         status_code=422,
         content={"detail": exc.detail},
+    )
+
+
+async def generic_render(request: Request, exc: ApiBaseException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"message": exc.message}
     )

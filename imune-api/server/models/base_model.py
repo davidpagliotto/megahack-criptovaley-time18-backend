@@ -14,7 +14,7 @@ class ApiBaseModel(BaseModel):
             value = d[key]
             if key == 'guid' and value is None:
                 d[key] = str(uuid.uuid4())
-            if type(value) == UUID:
+            elif type(value) == UUID:
                 d[key] = str(value)
 
         return d

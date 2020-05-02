@@ -18,7 +18,10 @@ class BatchService(BaseService):
         self._vaccine_service = VaccineService()
 
     async def upsert(self, batch: Batch, attr=None, value=None):
+        await self._validate_batch(batch)
+        return await super().upsert(batch)
 
+    async def _validate_batch(self, batch):
         if not batch.items or len(batch.items) == 0:
             raise BusinessValidationException('Is not possible register a batch without itens')
 
@@ -41,7 +44,6 @@ class BatchService(BaseService):
         if len(suppliers_guids_response_set) != len(suppliers_guids_request_set):
             raise BusinessValidationException(f'Some suppliers were not found on database. '
                                               f'{suppliers_guids_request_set - suppliers_guids_response_set}')
-
         try:
             await self._person_service.get_by_guid(batch.supplier)
         except NotFoundException:
@@ -57,5 +59,3 @@ class BatchService(BaseService):
                 await self._repository.get_by_guid(batch.batch_origin)
             except NotFoundException:
                 raise BusinessValidationException('Invalid Batch Origin')
-
-        return await super().upsert(batch)

@@ -5,3 +5,4 @@ class Collections(Enum):
     VACCINES = 'vaccines'
     PEOPLE = 'people'
     USERS = 'users'
+    BATCHES = 'batches'

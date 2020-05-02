@@ -7,17 +7,16 @@ from server.models.base_model import ApiBaseModel
 class Item(ApiBaseModel):
     vaccine_guid: UUID
     quantity: float
-    supplier: str
+    supplier: UUID
     enable: bool = True
     quantity: float
-    item_address: str
-    item_guid: UUID
+    address: str
 
 
 class Batch(ApiBaseModel):
     address: str = None
     supplier: UUID  # Guid person
-    batch_origin: str = None
+    batch_origin: UUID = None  # Guid batch origem
     document_number: str
     document: str  # s3 path
     geo: str = None

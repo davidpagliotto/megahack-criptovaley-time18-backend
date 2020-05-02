@@ -1,3 +1,4 @@
+import uuid
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -11,6 +12,8 @@ class ApiBaseModel(BaseModel):
 
         for key in d.keys():
             value = d[key]
+            if key == 'guid' and value is None:
+                d[key] = str(uuid.uuid4())
             if type(value) == UUID:
                 d[key] = str(value)
 

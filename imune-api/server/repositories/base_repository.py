@@ -19,7 +19,7 @@ class BaseRepository:
 
         attr = 'guid' if not attr else attr
         value = model_dict['guid'] if not value else value
-        await self.collection.replace_one({attr: {'$eq': value }}, model_dict, upsert=True)
+        await self.collection.replace_one({attr: {'$eq': value}}, model_dict, upsert=True)
 
         return model
 
@@ -35,7 +35,7 @@ class BaseRepository:
         return [self.model_clazz.parse_obj(d) for d in documents]
 
     async def get_by_guid(self, guid):
-        document = await self.collection.find_one({'guid': {'$eq': guid}})
+        document = await self.collection.find_one({'guid': {'$eq': str(guid)}})
         if document is None:
             raise NotFoundException("Item not found")
         return self.model_clazz.parse_obj(document)
@@ -45,3 +45,9 @@ class BaseRepository:
         if document is None:
             raise NotFoundException("Item not found")
         return self.model_clazz.parse_obj(document)
+
+    async def get_many_by_guids(self, guids):
+        guids_str = [str(g) for g in guids]
+        cursor = self.collection.find({'guid': {'$in': guids_str}})
+        documents = await cursor.to_list(None)
+        return [self.model_clazz.parse_obj(d) for d in documents]

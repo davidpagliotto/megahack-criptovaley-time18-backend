@@ -19,3 +19,6 @@ class BaseService:
 
     async def get_one_by_attr_value(self, attr, value):
         return await self._repository.get_one_by_attr_value(attr, value)
+
+    async def get_many_by_guids(self, guids):
+        return await self._repository.get_many_by_guids(guids)

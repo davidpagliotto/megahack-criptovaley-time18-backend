@@ -23,3 +23,4 @@ async def close_mongo_connection():
 
 async def apply_migrations():
     db.database.vaccines.create_index("guid", unique=True)
+    db.database.users.create_index("email", unique=True)

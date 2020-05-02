@@ -13,13 +13,13 @@ class BaseRepository:
         self.model_clazz = model_clazz
 
     async def upsert(self, model: ApiBaseModel, attr=None, value=None):
-        model.guid = str(uuid.uuid4()) if not model.guid else str(model.guid)
+        model.guid = uuid.uuid4() if not model.guid else model.guid
 
         model_dict = model.dict()
 
         attr = 'guid' if not attr else attr
-        value = model.guid if not value else value
-        await self.collection.replace_one({attr: {'$eq': value}}, model_dict, upsert=True)
+        value = model_dict['guid'] if not value else value
+        await self.collection.replace_one({attr: {'$eq': value }}, model_dict, upsert=True)
 
         return model
 

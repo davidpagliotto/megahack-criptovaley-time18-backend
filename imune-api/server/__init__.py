@@ -4,10 +4,12 @@ from firebase_admin import credentials
 from starlette.middleware.cors import CORSMiddleware
 
 from server.controllers.login_controller import login_router
+from server.controllers.person_controller import person_router
 from server.controllers.user_controller import user_router
 from server.controllers.vaccine_controller import vaccine_router
 from server.database.database import connect_to_mongo, close_mongo_connection, apply_migrations
-from server.exception.exception import NotFound, not_found_exception_handler
+from server.exception.exception import NotFoundException, not_found_exception_handler, BusinessValidationException, \
+    business_validation_exception_handler
 
 
 def init_app() -> FastAPI:
@@ -26,7 +28,7 @@ def init_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    routers = [user_router, login_router, vaccine_router]
+    routers = [user_router, login_router, vaccine_router, person_router]
 
     [app.include_router(**r) for r in routers]
 
@@ -36,7 +38,8 @@ def init_app() -> FastAPI:
     app.add_event_handler("startup", apply_migrations)
     app.add_event_handler("shutdown", close_mongo_connection)
 
-    app.add_exception_handler(NotFound, not_found_exception_handler)
+    app.add_exception_handler(NotFoundException, not_found_exception_handler)
+    app.add_exception_handler(BusinessValidationException, business_validation_exception_handler)
 
     return app
 

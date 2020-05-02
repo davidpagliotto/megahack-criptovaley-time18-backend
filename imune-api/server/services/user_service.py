@@ -15,4 +15,4 @@ class UserService(BaseService):
         if fb_user:
             user.uid = fb_user.get('localId')
             await super(UserService, self).upsert(user, 'email', user.email)
-            return UserOutput(user)
+            return UserOutput.parse_obj(user.dict())

@@ -1,8 +1,7 @@
 import uuid
 
-from fastapi import HTTPException
-
 from server.database.database import db
+from server.exception.exception import NotFound
 from server.models.base_model import ApiBaseModel
 
 
@@ -30,5 +29,5 @@ class BaseRepository:
     async def get_by_guid(self, guid):
         document = await self.collection.find_one({'guid': {'$eq': guid}})
         if document is None:
-            raise HTTPException(status_code=404, detail="Item not found")
+            raise NotFound("Item not found")
         return self.model_clazz.parse_obj(document)

@@ -7,6 +7,7 @@ from server.controllers.login_controller import login_router
 from server.controllers.user_controller import user_router
 from server.controllers.vaccine_controller import vaccine_router
 from server.database.database import connect_to_mongo, close_mongo_connection, apply_migrations
+from server.exception.exception import NotFound, not_found_exception_handler
 
 
 def init_app() -> FastAPI:
@@ -34,6 +35,8 @@ def init_app() -> FastAPI:
     app.add_event_handler("startup", connect_to_mongo)
     app.add_event_handler("startup", apply_migrations)
     app.add_event_handler("shutdown", close_mongo_connection)
+
+    app.add_exception_handler(NotFound, not_found_exception_handler)
 
     return app
 

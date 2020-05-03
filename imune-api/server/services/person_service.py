@@ -1,5 +1,5 @@
 from server.exception.exception import BusinessValidationException
-from server.models.person_model import Person, CategoryEnum
+from server.models.person_model import Person, PersonCategoryEnum
 from server.repositories.person_repository import PersonRepository
 from server.services.base_service import BaseService
 from server.services.utils import is_cpf_valid, is_cnpj_valid, keep_only_numbers
@@ -31,7 +31,7 @@ class PersonService(BaseService):
             return document
 
     async def upsert(self, person: Person):
-        if person.category != CategoryEnum.FINAL_USER and person.address is None:
+        if person.category != PersonCategoryEnum.FINAL_USER and person.address is None:
             raise BusinessValidationException('This category of user requires address attribute')
 
         if person.document:

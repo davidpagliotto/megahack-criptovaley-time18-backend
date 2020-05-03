@@ -10,7 +10,7 @@ class Item(ApiBaseModel):
     supplier: UUID
     enable: bool = True
     quantity: float
-    address: str
+    address: str = None
 
 
 class Batch(ApiBaseModel):

@@ -72,7 +72,8 @@ class BatchService(BaseService):
             description='Initial transaction',
             responsible=batch.responsible,
             geo=batch.geo,
-            destiny='Storage',)
+            destiny='Storage',
+            transaction_id=batch.transaction_id)
 
         await self.create_transaction(batch.guid, transaction)
 

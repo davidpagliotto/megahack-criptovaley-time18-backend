@@ -7,3 +7,4 @@ class Collections(Enum):
     USERS = 'users'
     BATCHES = 'batches'
     BATCH_TRANSACTIONS = 'batches.transactions'
+    VACCINATES = 'vaccinates'

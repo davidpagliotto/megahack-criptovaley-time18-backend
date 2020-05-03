@@ -3,7 +3,7 @@ from enum import Enum
 from server.models.base_model import ApiBaseModel
 
 
-class CategoryEnum(str, Enum):
+class PersonCategoryEnum(str, Enum):
     LAB = 'lab'
     SHIPPING = 'shipping '
     HEALTH_FACILITY = 'health_facility'
@@ -19,7 +19,7 @@ class PersonTypeEnum(str, Enum):
 class Person(ApiBaseModel):
     address: str = None
     type: PersonTypeEnum
-    category: CategoryEnum
+    category: PersonCategoryEnum
     enable: bool = True
     full_name: str
     document: str

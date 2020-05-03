@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 
 from server.filter.filter import get_token
-from server.models.person_model import Person
+from server.models.person_model import Person, PersonCategoryEnum, PersonTypeEnum
 from server.services.person_service import PersonService
 
 router = APIRouter()
@@ -22,10 +22,13 @@ async def post(person: Person):
 
 
 @router.get(path="", response_model=List[Person])
-async def get_all(document: str = None, full_name: str = None):
+async def get_all(document: str = None, full_name: str = None, category: PersonCategoryEnum = None,
+                  person_type: PersonTypeEnum = None):
     parameters = {
         'document': document,
-        'full_name': full_name
+        'full_name': full_name,
+        'category': category,
+        'type': person_type
     }
     person_service = PersonService()
     return await person_service.get_all(parameters)

@@ -22,6 +22,18 @@ async def post(batch: Batch):
     return await batch_service.upsert(batch)
 
 
+@router.get(path="", response_model=List[Batch])
+async def get_all():
+    batch_service = BatchService()
+    return await batch_service.get_all()
+
+
+@router.get(path="/{batch_guid}", response_model=Batch)
+async def get_by_guid(batch_guid):
+    batch_service = BatchService()
+    return await batch_service.get_by_guid(batch_guid)
+
+
 @router.get(path="/{batch_guid}/transactions", response_model=List[BatchTransaction])
 async def get_transaction(batch_guid: UUID):
     batch_service = BatchService()

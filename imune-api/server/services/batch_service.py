@@ -1,10 +1,12 @@
 from typing import List
+from uuid import UUID
 
 from server.exception.exception import NotFoundException, BusinessValidationException
-from server.models.batch_model import Batch
+from server.models.batch_model import Batch, BatchTransaction
 from server.models.person_model import Person
 from server.models.vaccine_model import Vaccine
 from server.repositories.batch_repository import BatchRepository
+from server.repositories.batch_transaction_repository import BatchTransactionRepository
 from server.services.base_service import BaseService
 from server.services.person_service import PersonService
 from server.services.vaccine_service import VaccineService
@@ -19,7 +21,11 @@ class BatchService(BaseService):
 
     async def upsert(self, batch: Batch, attr=None, value=None):
         await self._validate_batch(batch)
-        return await super().upsert(batch)
+        batch = await super().upsert(batch)
+
+        await self._first_transaction(batch)
+
+        return batch
 
     async def _validate_batch(self, batch):
         if not batch.items or len(batch.items) == 0:
@@ -59,3 +65,45 @@ class BatchService(BaseService):
                 await self._repository.get_by_guid(batch.batch_origin)
             except NotFoundException:
                 raise BusinessValidationException('Invalid Batch Origin')
+
+    async def _first_transaction(self, batch: Batch):
+        transaction = BatchTransaction(
+            batch=batch.guid,
+            description='Initial transaction',
+            responsible=batch.responsible,
+            geo=batch.geo,
+            destiny='Storage',)
+
+        await self.create_transaction(batch.guid, transaction)
+
+    async def get_transactions(self, batch_guid: UUID):
+        try:
+            await self._repository.get_by_guid(batch_guid)
+        except NotFoundException:
+            raise BusinessValidationException('Invalid Batch')
+
+        repository = BatchTransactionRepository()
+        return await repository.get_all({"batch": str(batch_guid)})
+
+    async def create_transaction(self, batch_guid: UUID, transaction: BatchTransaction):
+        await self._validate_transaction(batch_guid, transaction)
+
+        repository = BatchTransactionRepository()
+        return await repository.upsert(transaction)
+
+    async def _validate_transaction(self, batch_guid: UUID, transaction: BatchTransaction):
+        if not transaction.description.strip():
+            raise BusinessValidationException('Description must be informed in Transaction')
+
+        if not transaction.destiny.strip():
+            raise BusinessValidationException('Destiny must be informed in Transaction')
+
+        try:
+            await self._repository.get_by_guid(batch_guid)
+        except NotFoundException:
+            raise BusinessValidationException('Invalid Batch into Transaction')
+
+        try:
+            await self._person_service.get_by_guid(transaction.responsible)
+        except NotFoundException:
+            raise BusinessValidationException('Invalid Responsible into Transaction')

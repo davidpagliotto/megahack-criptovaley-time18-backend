@@ -6,3 +6,4 @@ class Collections(Enum):
     PEOPLE = 'people'
     USERS = 'users'
     BATCHES = 'batches'
+    BATCH_TRANSACTIONS = 'batches.transactions'

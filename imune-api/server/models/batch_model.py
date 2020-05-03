@@ -22,3 +22,12 @@ class Batch(ApiBaseModel):
     geo: str = None
     responsible: UUID  # Guid person
     items: List[Item]
+
+
+class BatchTransaction(ApiBaseModel):
+    address: str = None
+    batch: UUID  # Guid person
+    destiny: str
+    description: str
+    geo: str = None
+    responsible: UUID  # Guid person

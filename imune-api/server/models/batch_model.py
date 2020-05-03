@@ -18,7 +18,8 @@ class Batch(ApiBaseModel):
     supplier: UUID  # Guid person
     batch_origin: UUID = None  # Guid batch origem
     document_number: str
-    document: str  # s3 path
+    document: str = None  # s3 path
+    document_type: str = None
     geo: str = None
     responsible: UUID  # Guid person
     items: List[Item]

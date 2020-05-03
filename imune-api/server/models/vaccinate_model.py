@@ -21,3 +21,4 @@ class Vaccinate(ApiBaseModel):
     document: str
     date_of_vaccination: datetime
     vaccine: UUID
+    transaction_id: str

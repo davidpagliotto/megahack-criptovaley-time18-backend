@@ -22,6 +22,7 @@ class Batch(ApiBaseModel):
     geo: str = None
     responsible: UUID  # Guid person
     items: List[Item]
+    transaction_id: str
 
 
 class BatchTransaction(ApiBaseModel):
@@ -31,3 +32,4 @@ class BatchTransaction(ApiBaseModel):
     description: str
     geo: str = None
     responsible: UUID  # Guid person
+    transaction_id: str

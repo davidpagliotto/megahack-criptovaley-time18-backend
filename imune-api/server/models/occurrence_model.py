@@ -8,7 +8,7 @@ class Occurrence(ApiBaseModel):
     batch: UUID
     document: str
     document_type: str
-    vaccine: str
+    vaccine: UUID
     death: bool
     effects: str
     geo: str = None

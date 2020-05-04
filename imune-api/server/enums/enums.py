@@ -8,3 +8,4 @@ class Collections(Enum):
     BATCHES = 'batches'
     BATCH_TRANSACTIONS = 'batches.transactions'
     VACCINATES = 'vaccinates'
+    OCCURRENCES = 'occurrences'

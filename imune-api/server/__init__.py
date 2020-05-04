@@ -3,6 +3,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from server.controllers.batch_controller import batch_router
 from server.controllers.login_controller import login_router
+from server.controllers.occurrence_controller import occurrence_router
 from server.controllers.person_controller import person_router
 from server.controllers.user_controller import user_router
 from server.controllers.vaccinate_controller import vaccinate_router
@@ -35,7 +36,15 @@ def _init_fastapi_app():
         allow_headers=['*'],
     )
 
-    routers = [user_router, login_router, vaccine_router, person_router, batch_router, vaccinate_router]
+    routers = [
+        user_router,
+        login_router,
+        vaccine_router,
+        person_router,
+        batch_router,
+        vaccinate_router,
+        occurrence_router
+    ]
     [app.include_router(**r) for r in routers]
 
     app.add_event_handler('startup', connect_to_mongo)

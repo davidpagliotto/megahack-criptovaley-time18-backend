@@ -12,3 +12,4 @@ class Occurrence(ApiBaseModel):
     vaccine: str
     death: bool
     effects: str
+    geo: str = None

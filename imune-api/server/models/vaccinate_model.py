@@ -14,7 +14,7 @@ class DocumentType(str, Enum):
 
 
 class Vaccinate(ApiBaseModel):
-    nome: str
+    name: str
     responsible: UUID
     batch: UUID
     document_type: DocumentType
@@ -22,3 +22,8 @@ class Vaccinate(ApiBaseModel):
     date_of_vaccination: datetime
     vaccine: UUID
     transaction_id: str
+
+
+class VaccinateOutput(Vaccinate):
+    name: str
+    vaccine_name: str

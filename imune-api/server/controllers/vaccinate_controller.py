@@ -4,7 +4,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 
 from server.filter.filter import get_token
-from server.models.vaccinate_model import Vaccinate
+from server.models.vaccinate_model import Vaccinate, VaccinateOutput
 from server.services.vaccinate_service import VaccinateService
 
 router = APIRouter()
@@ -22,7 +22,7 @@ async def post(vaccinate: Vaccinate):
     return await vaccinate_service.upsert(vaccinate)
 
 
-@router.get(path="", response_model=List[Vaccinate])
+@router.get(path="", response_model=List[VaccinateOutput])
 async def get_all(document: str = None, batch: UUID = None, vaccine: UUID = None, responsible: UUID = None):
     parameters = {
         'document': document,

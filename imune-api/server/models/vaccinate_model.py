@@ -3,6 +3,7 @@ from enum import Enum
 from uuid import UUID
 
 from server.models.base_model import ApiBaseModel
+from server.models.vaccine_model import Vaccine
 
 
 class DocumentType(str, Enum):
@@ -25,5 +26,4 @@ class Vaccinate(ApiBaseModel):
 
 
 class VaccinateOutput(Vaccinate):
-    name: str
-    vaccine_name: str
+    vaccine_obj: Vaccine

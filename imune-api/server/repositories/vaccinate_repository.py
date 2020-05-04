@@ -1,7 +1,6 @@
 from server.enums.enums import Collections
 from server.models.vaccinate_model import Vaccinate, VaccinateOutput
 from server.repositories.base_repository import BaseRepository
-from server.services.vaccine_service import VaccineService
 
 
 class VaccinateRepository(BaseRepository):
@@ -10,16 +9,27 @@ class VaccinateRepository(BaseRepository):
         super().__init__(Collections.VACCINATES.value, Vaccinate)
 
     async def get_all(self, parameters: dict = None):
-        vaccinates = await super(VaccinateRepository, self).get_all(parameters)
+        cursor = self.collection.aggregate([{
+            '$lookup': {
+                'from': 'vaccines',
+                'localField': 'vaccine',
+                'foreignField': 'guid',
+                'as': 'vaccine_obj'
+            }
+        }, {
+            '$project': {
+                'vaccine_obj': {
+                    '$arrayElemAt': ["$vaccine_obj", 0]
+                },
+                'document': "$$ROOT"
+            }
+        }])
 
-        vaccine_guids = list(map(lambda e: e.vaccine, vaccinates))
-        vaccines_service = VaccineService()
-        vaccines = await vaccines_service.get_many_by_guids(vaccine_guids)
-
+        documents = await cursor.to_list(None)
         ret = []
-        for vaccinate in vaccinates:
-            d = vaccinate.dict()
-            d['vaccine_name'] = list(map(lambda e: e.name, vaccines))[0]
-            ret.append(VaccinateOutput(**d))
-
+        for d in documents:
+            vaccinate_response = d['document']
+            vaccinate_response['vaccine_obj'] = d['vaccine_obj']
+            vaccine_output = VaccinateOutput.parse_obj(vaccinate_response)
+            ret.append(vaccine_output)
         return ret

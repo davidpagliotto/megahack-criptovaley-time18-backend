@@ -17,6 +17,6 @@ class OccurrenceService(BaseService):
 
     async def _validate_occurrence(self, occurrence):
         try:
-            await self._batch_service.get_by_guid(occurrence.batch.guid)
+            await self._batch_service.get_by_guid(occurrence.batch)
         except NotFoundException:
             raise BusinessValidationException('Invalid Batch')
